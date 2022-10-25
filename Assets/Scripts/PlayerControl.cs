@@ -12,10 +12,14 @@ using UnityEngine.InputSystem;
 public class PlayerControl : MonoBehaviour
 {
     
-    [SerializeField]private float playerSpeed = 2.0f;
-    [SerializeField]private float jumpHeight = 1.0f;
-    [SerializeField]private float gravityValue = -9.81f;
-    [SerializeField]private float rotationSpeed = .8f;
+    [SerializeField] float playerSpeed = 4.0f;
+    [SerializeField] float jumpHeight = 1.0f;
+    [SerializeField] float gravityValue = -9.81f;
+    [SerializeField] float rotationSpeed = .8f;
+    [SerializeField] GameObject arrowPrefab;
+    [SerializeField] Transform bowTransform;
+    [SerializeField] Transform arrowParent;
+    [SerializeField] float arrowHitMissDistance = 25f;
 
     private CharacterController controller;
     private PlayerInput playerInput;
@@ -23,21 +27,57 @@ public class PlayerControl : MonoBehaviour
     private bool groundedPlayer;
     private Transform cameraTransform;
 
+
     private InputAction moveAction;
     private InputAction jumpAction;
+    private InputAction aimAction;
+    private InputAction shootAction;
 
-
-    private void Start()
+    private void Awake()
     {
         controller = GetComponent<CharacterController>();
         playerInput = GetComponent<PlayerInput>();
         cameraTransform = Camera.main.transform;
         moveAction = playerInput.actions["Move"];
         jumpAction = playerInput.actions["Jump"];
+        aimAction = playerInput.actions["Aim"];
+        shootAction = playerInput.actions["Shoot"];
+
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
-    void Update()
-    {
+    private void OnEnable(){
+        shootAction.performed += _ => ShootGun();
+    }
+    private void OnDisable(){
+        shootAction.performed -= _ => ShootGun();
+    }
+
+    void ShootGun(){
+        RaycastHit hit;
+        //? check vid @ 42:00 minute mark https://www.youtube.com/watch?v=SeBEvM2zMpY&ab_channel=samyam
+        GameObject arrow = GameObject.Instantiate(arrowPrefab, bowTransform.position, Quaternion.identity, arrowParent); //makes new arrow
+        ArrowController arrowController = arrow.GetComponent<ArrowController>(); // getting endpoint for arrow
+        if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hit, Mathf.Infinity)){
+            arrowController.target = hit.point;
+            arrowController.hit = true;
+        }
+        else {
+            arrowController.target = cameraTransform.position + cameraTransform.forward * arrowHitMissDistance;
+            arrowController.hit = false;
+        }
+    }
+
+    void Update(){
+        PlayerMovement();
+        ChangePlayerSpeed();
+    }
+
+
+
+
+
+    void PlayerMovement(){
         groundedPlayer = controller.isGrounded;
         if (groundedPlayer && playerVelocity.y < 0)
         {
@@ -67,6 +107,18 @@ public class PlayerControl : MonoBehaviour
         float targetAngle = cameraTransform.eulerAngles.y; // quaternion->vector3->y-value
         Quaternion targetRotation = Quaternion.Euler(0, targetAngle, 0);
         transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotationSpeed  * Time.deltaTime);
+    }
 
+    void ChangePlayerSpeed(){
+        aimAction.performed += _ => SlowDownCharacter();
+        aimAction.canceled += _ => NormalizeCharacterSpeed();
+    }
+
+    void SlowDownCharacter(){
+        playerSpeed -= 3f;
+    }
+
+    void NormalizeCharacterSpeed(){
+        playerSpeed += 3f;
     }
 }
