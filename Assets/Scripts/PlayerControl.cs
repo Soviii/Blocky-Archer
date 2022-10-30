@@ -27,6 +27,8 @@ public class PlayerControl : MonoBehaviour
     private bool groundedPlayer;
     private Transform cameraTransform;
 
+    AudioSource audioSource;
+    [SerializeField] AudioClip arrowShotSound;
 
     private InputAction moveAction;
     private InputAction jumpAction;
@@ -35,6 +37,7 @@ public class PlayerControl : MonoBehaviour
 
     private void Awake()
     {
+        audioSource = GetComponent<AudioSource>();
         controller = GetComponent<CharacterController>();
         playerInput = GetComponent<PlayerInput>();
         cameraTransform = Camera.main.transform;
@@ -43,17 +46,19 @@ public class PlayerControl : MonoBehaviour
         aimAction = playerInput.actions["Aim"];
         shootAction = playerInput.actions["Shoot"];
 
-        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.lockState = CursorLockMode.Locked; 
     }
 
     private void OnEnable(){
         shootAction.performed += _ => ShootGun();
     }
+    
     private void OnDisable(){
         shootAction.performed -= _ => ShootGun();
     }
 
     void ShootGun(){
+        audioSource.PlayOneShot(arrowShotSound);
         RaycastHit hit;
         //? check vid @ 42:00 minute mark https://www.youtube.com/watch?v=SeBEvM2zMpY&ab_channel=samyam
         GameObject arrow = GameObject.Instantiate(arrowPrefab, bowTransform.position, Quaternion.identity, arrowParent); //makes new arrow
@@ -72,10 +77,6 @@ public class PlayerControl : MonoBehaviour
         PlayerMovement();
         ChangePlayerSpeed();
     }
-
-
-
-
 
     void PlayerMovement(){
         groundedPlayer = controller.isGrounded;
