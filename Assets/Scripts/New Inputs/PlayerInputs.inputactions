@@ -30,19 +30,10 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Shoot",
-                    "type": "Button",
-                    "id": "935ce90b-0ef6-4b84-891c-7a0c29a9a0fd",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Powerful Shoot",
                     "type": "Button",
                     "id": "22bee20d-3187-4fdb-b1bc-2ac77d5ed40c",
                     "expectedControlType": "Button",
@@ -131,23 +122,12 @@
                 },
                 {
                     "name": "",
-                    "id": "86eec5d0-4fd1-4c91-9a86-9f7c28bc563e",
+                    "id": "cba9a89b-de8a-43af-b611-16a5c22bba39",
                     "path": "<Mouse>/leftButton",
-                    "interactions": "SlowTap(duration=0.2)",
+                    "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Shoot",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "cba9a89b-de8a-43af-b611-16a5c22bba39",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "SlowTap",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Powerful Shoot",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
