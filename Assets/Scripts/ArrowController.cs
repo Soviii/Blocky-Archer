@@ -4,15 +4,18 @@ using UnityEngine;
 
 public class ArrowController : MonoBehaviour
 {
-    float speed = 50f;
-    float timeToDestroy = 3f;
-
+    public float speed;
+    public Vector3 angle;
     public Vector3 target{ get; set; }
     public bool hit { get; set; }
 
-    private void OnEnable() {
-        Destroy(gameObject, timeToDestroy);
-    }
+    float timeToDestroy = 3f;
+    private Rigidbody rb;
+    
+    // void Start() {
+    //     rb = GetComponent<Rigidbody>();
+    //     rb.AddRelativeForce(angle*speed, ForceMode.Force);
+    // }
 
     private void Update() {
         transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
@@ -20,6 +23,10 @@ public class ArrowController : MonoBehaviour
         if (!hit && Vector3.Distance(transform.position, target) < 0.01f){
             Destroy(gameObject);
         }
+    }
+
+    private void OnEnable() {
+        Destroy(gameObject, timeToDestroy);
     }
 
     private void OnCollisionEnter(Collision other) {

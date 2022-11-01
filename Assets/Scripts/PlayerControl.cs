@@ -34,9 +34,10 @@ public class PlayerControl : MonoBehaviour
     private InputAction jumpAction;
     private InputAction aimAction;
     private InputAction shootAction;
+    private float arrowForce = 0;
+    private float arrowForceMultiplier = 30;
 
-    private void Awake()
-    {
+    private void Awake(){
         audioSource = GetComponent<AudioSource>();
         controller = GetComponent<CharacterController>();
         playerInput = GetComponent<PlayerInput>();
@@ -45,37 +46,50 @@ public class PlayerControl : MonoBehaviour
         jumpAction = playerInput.actions["Jump"];
         aimAction = playerInput.actions["Aim"];
         shootAction = playerInput.actions["Shoot"];
-
+        aimAction.performed += _ => SlowDownCharacter();
+        aimAction.canceled += _ => NormalizeCharacterSpeed();
         Cursor.lockState = CursorLockMode.Locked; 
-    }
-
-    private void OnEnable(){
-        shootAction.performed += _ => ShootGun();
-    }
-    
-    private void OnDisable(){
-        shootAction.performed -= _ => ShootGun();
-    }
-
-    void ShootGun(){
-        audioSource.PlayOneShot(arrowShotSound);
-        RaycastHit hit;
-        //? check vid @ 42:00 minute mark https://www.youtube.com/watch?v=SeBEvM2zMpY&ab_channel=samyam
-        GameObject arrow = GameObject.Instantiate(arrowPrefab, bowTransform.position, Quaternion.identity, arrowParent); //makes new arrow
-        ArrowController arrowController = arrow.GetComponent<ArrowController>(); // getting endpoint for arrow
-        if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hit, Mathf.Infinity)){
-            arrowController.target = hit.point;
-            arrowController.hit = true;
-        }
-        else {
-            arrowController.target = cameraTransform.position + cameraTransform.forward * arrowHitMissDistance;
-            arrowController.hit = false;
-        }
     }
 
     void Update(){
         PlayerMovement();
         ChangePlayerSpeed();
+        LoadingBow();
+    }
+
+    void LoadingBow(){
+        if (aimAction.IsPressed()){
+            if(shootAction.IsPressed()){
+                if(arrowForce >= 50){
+                    arrowForce = 50f;
+                }
+                else {
+                    arrowForce += Time.deltaTime * arrowForceMultiplier;
+                }
+            } else if (arrowForce > 0){
+                InitiateShootProcess();
+                // Debug.Log(arrowForce);
+                arrowForce = 0;
+            }
+        }
+    }
+
+    void InitiateShootProcess() {
+            audioSource.PlayOneShot(arrowShotSound);
+            RaycastHit hit;
+            //? check vid @ 42:00 minute mark https://www.youtube.com/watch?v=SeBEvM2zMpY&ab_channel=samyam
+            GameObject arrow = GameObject.Instantiate(arrowPrefab, bowTransform.position, Quaternion.identity, arrowParent); //makes new arrow
+            arrow.GetComponent<ArrowController>().speed = arrowForce;
+            arrow.GetComponent<ArrowController>().angle = cameraTransform.eulerAngles;
+            ArrowController arrowController = arrow.GetComponent<ArrowController>(); // getting endpoint for arrow
+            if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hit, Mathf.Infinity)){
+                arrowController.target = hit.point;
+                arrowController.hit = true;
+            }
+            else {
+                arrowController.target = cameraTransform.position + cameraTransform.forward * arrowHitMissDistance;
+                arrowController.hit = false;
+            }
     }
 
     void PlayerMovement(){
@@ -96,8 +110,7 @@ public class PlayerControl : MonoBehaviour
         controller.Move(move * Time.deltaTime * playerSpeed);
 
         // Changes the height position of the player..
-        if (jumpAction.triggered && groundedPlayer)
-        {
+        if (jumpAction.triggered && groundedPlayer){
             playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
         }
 
@@ -111,8 +124,6 @@ public class PlayerControl : MonoBehaviour
     }
 
     void ChangePlayerSpeed(){
-        aimAction.performed += _ => SlowDownCharacter();
-        aimAction.canceled += _ => NormalizeCharacterSpeed();
     }
 
     void SlowDownCharacter(){

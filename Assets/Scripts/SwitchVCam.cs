@@ -6,14 +6,15 @@ public class SwitchVCam : MonoBehaviour
 {
     [SerializeField] private PlayerInput playerInput;
     [SerializeField] private int priorityBoostAmount = 5; //* was originally 10; 5 should be fine
-    [SerializeField] private Canvas thirdPersonCanvas;
-    [SerializeField] private Canvas aimCanvas;
-    [SerializeField] private GameObject player;
+    [SerializeField] private GameObject thirdPersonCanvas; //* disabled GameObject for canvas (too big and annoying)
+    [SerializeField] private GameObject aimCanvas; //* disabled GameObject for canvas (too big and annoying)
 
     private CinemachineVirtualCamera virtualCamera;
     private InputAction aimAction;
 
     private void Awake(){
+        aimCanvas.SetActive(true);
+        thirdPersonCanvas.SetActive(true);
         virtualCamera = GetComponent<CinemachineVirtualCamera>();
         aimAction = playerInput.actions["Aim"];
     }
@@ -34,14 +35,14 @@ public class SwitchVCam : MonoBehaviour
 
     private void StartAim(){
         virtualCamera.Priority += priorityBoostAmount;
-        aimCanvas.enabled = true;
-        thirdPersonCanvas.enabled = false;
+        aimCanvas.GetComponent<Canvas>().enabled = true;
+        thirdPersonCanvas.GetComponent<Canvas>().enabled = false;
     }
 
     private void CancelAim(){
         virtualCamera.Priority -= priorityBoostAmount;
-        aimCanvas.enabled = false;
-        thirdPersonCanvas.enabled = true;
+        aimCanvas.GetComponent<Canvas>().enabled = false;
+        thirdPersonCanvas.GetComponent<Canvas>().enabled = true;
     }
 
 }

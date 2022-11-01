@@ -337,7 +337,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &179112820
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1097,7 +1097,7 @@ RectTransform:
   m_GameObject: {fileID: 549872037}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 0.86625, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1123137262}
@@ -1278,9 +1278,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerInput: {fileID: 189344785}
   priorityBoostAmount: 10
-  thirdPersonCanvas: {fileID: 1123137261}
-  aimCanvas: {fileID: 179112822}
-  player: {fileID: 0}
+  thirdPersonCanvas: {fileID: 1123137258}
+  aimCanvas: {fileID: 179112819}
 --- !u!4 &1012652891 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1236616993879316580, guid: 2e425500429ff0c4fb1615a5d1a52e62, type: 3}
@@ -1304,7 +1303,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1123137259
 MonoBehaviour:
   m_ObjectHideFlags: 0
