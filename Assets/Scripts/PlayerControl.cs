@@ -37,6 +37,7 @@ public class PlayerControl : MonoBehaviour
     private float arrowForce = 0;
     private float arrowForceMultiplier = 30;
 
+    public int count = 1;
     private void Awake(){
         audioSource = GetComponent<AudioSource>();
         controller = GetComponent<CharacterController>();
@@ -67,6 +68,7 @@ public class PlayerControl : MonoBehaviour
                     arrowForce += Time.deltaTime * arrowForceMultiplier;
                 }
             } else if (arrowForce > 0){
+                count = count + 1;
                 InitiateShootProcess();
                 // Debug.Log(arrowForce);
                 arrowForce = 0;
@@ -75,12 +77,15 @@ public class PlayerControl : MonoBehaviour
     }
 
     void InitiateShootProcess() {
-            audioSource.PlayOneShot(arrowShotSound);
+            // audioSource.PlayOneShot(arrowShotSound);
+            // Debug.Log(arrowForce);
+            Debug.Log("created " + count);
             RaycastHit hit;
             //? check vid @ 42:00 minute mark https://www.youtube.com/watch?v=SeBEvM2zMpY&ab_channel=samyam
             GameObject arrow = GameObject.Instantiate(arrowPrefab, bowTransform.position, Quaternion.identity, arrowParent); //makes new arrow
             arrow.GetComponent<ArrowController>().speed = arrowForce;
             arrow.GetComponent<ArrowController>().angle = cameraTransform.eulerAngles;
+            arrow.GetComponent<ArrowController>().counter = count;
             ArrowController arrowController = arrow.GetComponent<ArrowController>(); // getting endpoint for arrow
             if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hit, Mathf.Infinity)){
                 arrowController.target = hit.point;

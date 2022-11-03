@@ -11,12 +11,15 @@ public class ArrowController : MonoBehaviour
 
     float timeToDestroy = 3f;
     private Rigidbody rb;
-    
+    public int counter;
     // void Start() {
     //     rb = GetComponent<Rigidbody>();
     //     rb.AddRelativeForce(angle*speed, ForceMode.Force);
     // }
 
+    private void Start() {
+        transform.eulerAngles = angle;
+    }
     private void Update() {
         transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
 
@@ -30,6 +33,7 @@ public class ArrowController : MonoBehaviour
     }
 
     private void OnCollisionEnter(Collision other) {
+        Debug.Log(counter + "Destroyed!");
         Destroy(gameObject);
     }
 }
