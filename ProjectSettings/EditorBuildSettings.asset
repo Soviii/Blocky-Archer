@@ -4,5 +4,11 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Stephen/TrainingGround.unity
+    guid: a516482e358a84feb843b8ff4a1c6d91
+  - enabled: 1
+    path: Assets/Scenes/Stephen/Forest_Map.unity
+    guid: 6dd6022329ba9374caa086eef594cf42
   m_configObjects: {}
