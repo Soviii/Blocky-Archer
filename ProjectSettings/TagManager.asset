@@ -4,20 +4,12 @@
 TagManager:
   serializedVersion: 2
   tags:
-<<<<<<< HEAD
-  - cat
-  - arrow
+  - Trigger
   - icicle
-  - lion
-  - ground
-  - animal
+  - arrow
   - Enemy
   - snowman
-  - water
-=======
-  - Ground
-  - arrow
->>>>>>> 168e48db452452fb0f9d37ea0235db5ede3a201f
+  - IceSheet
   layers:
   - Default
   - TransparentFX
