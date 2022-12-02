@@ -10,6 +10,19 @@ TagManager:
   - Enemy
   - snowman
   - IceSheet
+  - ramp
+  - rock
+  - Arrow
+  - Ground
+  - Undefined
+  - SnowGlobe
+  - cat
+  - dog
+  - chicken
+  - lion
+  - polarBear
+  - penguin
+  - water
   layers:
   - Default
   - TransparentFX

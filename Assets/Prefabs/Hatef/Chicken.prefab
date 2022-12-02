@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 4280382740399646187}
   m_Layer: 0
   m_Name: Chicken
-  m_TagString: Enemy
+  m_TagString: chicken
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -119,6 +119,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edb1518219d8622498622b970fa78a7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audio: {fileID: 0}
+  clip: {fileID: 0}
   t1: {fileID: 0}
   attackSpeed: 10
   rotSpeed: 3
@@ -134,6 +136,7 @@ MonoBehaviour:
   posX: 0
   posY: 0
   posZ: 0
+  isBoss: 0
 --- !u!195 &4280382740399646187
 NavMeshAgent:
   m_ObjectHideFlags: 0

@@ -36,10 +36,47 @@ public class PlayerHealth : MonoBehaviour
     void OnCollisionEnter(Collision coll)
     {
         Debug.Log(coll.gameObject.tag);
+        string name = coll.gameObject.tag;
+        switch(name){
+            case "cat":
+                healthRemaining-= 5f;
+                break;
+            case "dog":
+                healthRemaining-= 10f;
+                break;
+            case "polarBear":
+                healthRemaining-= 20f;
+                break;
+            case "chicken":
+                healthRemaining-= 5f;
+                break;
+            case "lion":
+                healthRemaining-= 20f;
+                break; 
+            case "penguin":
+                healthRemaining-= 10f;
+                break;
+            case "SnowGlobe":
+                healthRemaining-= 10f;
+                break;
+            case "snowman":
+                healthRemaining-= 25f;
+                break;
+            default:
+                break;
+        }  
 
-        if (coll.gameObject.tag == "Enemy"){
+        /*if (coll.gameObject.tag == "Enemy"){
             healthRemaining-= 20f;
-        }
+        }*/
+        /*if (coll.gameObject.tag == "SnowGlobe"){
+            healthRemaining-= 20f;
+        }*/
 
+    }
+    void OnTriggerEnter(Collider coll){
+        if (coll.gameObject.tag == "water"){
+            healthRemaining = 0;
+        }
     }
 }

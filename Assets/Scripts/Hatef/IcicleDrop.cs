@@ -6,17 +6,27 @@ public class IcicleDrop : MonoBehaviour
 {
     Rigidbody rb;
     bool canDamage;
+    public Trigger trScript;
+    public GameObject trGo;
+    private BoxCollider bc;
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        bc = GetComponent<BoxCollider>();
+        bc.enabled = false;
         canDamage = true;
+        trGo = GameObject.FindGameObjectWithTag("Trigger");
+        trScript = trGo.GetComponent<Trigger>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if(trScript.isTriggered){
+            rb.useGravity = true;
+            bc.enabled = true;
+        }
     }
 
     void OnCollisionEnter(Collision coll)

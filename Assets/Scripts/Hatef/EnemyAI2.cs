@@ -5,6 +5,8 @@ using UnityEngine.AI;
 
 public class EnemyAI2 : MonoBehaviour
 {
+    public AudioSource audio;
+    public AudioClip clip;
     Animator anim;
     Transform playerTransform;
     public Transform t1;
@@ -28,8 +30,14 @@ public class EnemyAI2 : MonoBehaviour
     public float posY;
     public float posZ;
     Vector3[] positions;
+    public bool isBoss;
+    private bool playSound;
+    private bool firstTime;
     // Start is called before the first frame update
     void Awake(){
+        playSound = true;
+        //firstTime = true;
+        audio = GetComponent<AudioSource>();
         forward = true;
         inRange = false;
         navMeshAgent=GetComponent<NavMeshAgent>();
@@ -57,6 +65,14 @@ public class EnemyAI2 : MonoBehaviour
     void Start()
     {
         anim = GetComponent<Animator>();
+        //playSound = false;
+        /*if(gameObject.name == "Final Boss"){
+            isBoss = true;
+            forward = false;
+        }
+        else{
+            isBoss = false;
+        }*/
         //anim.SetInteger("Walk", 1);
         //playerTransform = PlayerGO.transform;
         distance = Vector3.Distance(PlayerGO.transform.position, transform.transform.position);
@@ -70,10 +86,24 @@ public class EnemyAI2 : MonoBehaviour
     void Update()
     {
 
+
         distance = Vector3.Distance(PlayerGO.transform.position, transform.transform.position);
-        if (distance < activationdistance ){
+        /*if(isBoss){
+            Debug.Log("distance:");
+            Debug.Log(distance);        
+        }*/
+        if (distance < activationdistance){
+            //firstTime = false;
+            if (playSound){
+                audio.PlayOneShot(clip);
+                playSound = false;
+            }
             inRange = true;
+            playSound = false;
+            //audio.PlayOneShot(clip);
         }
+
+
 
         /*else{
             inRange = false;
