@@ -12,7 +12,7 @@ using UnityEngine.InputSystem;
 public class PlayerControl : MonoBehaviour
 {
     
-    [SerializeField] float playerSpeed = 4.0f;
+    [SerializeField] float playerSpeed = 50.0f; // 10.0f
     [SerializeField] float jumpHeight = 1.0f;
     [SerializeField] float gravityValue = -9.81f;
     [SerializeField] float rotationSpeed = .8f;
@@ -34,14 +34,8 @@ public class PlayerControl : MonoBehaviour
     private InputAction jumpAction;
     private InputAction aimAction;
     private InputAction shootAction;
-    private float arrowForce = 0;
+    private float arrowForce = 15; // 0
     private float arrowForceMultiplier = 30;
-
-    MeshRenderer meshRenderer;
-    [SerializeField] int hitCount = 0;
-    [SerializeField] int speed;
-    bool targetHit = false;
-
 
     public int count = 1;
     private void Awake(){
@@ -62,7 +56,6 @@ public class PlayerControl : MonoBehaviour
         PlayerMovement();
         ChangePlayerSpeed();
         LoadingBow();
-        //openGate();
     }
 
     void LoadingBow(){

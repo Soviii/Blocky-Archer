@@ -28,21 +28,10 @@ public class target : MonoBehaviour
         hitCount++;
     }
 
-    //public void openGate(bool hit)
-    //{
-    //    //gate = hitCount;
-
-    //    if (hitCount == 3)
-    //    {
-    //        FindObjectOfType<Gate>().openGate();
-    //    }
-    //}
-
     void Update()
     {
-        
-
-        if (hitCount == 3)
+       
+        if (hitCount == 9)
         {
             FindObjectOfType<Gate>().openGate();
         }

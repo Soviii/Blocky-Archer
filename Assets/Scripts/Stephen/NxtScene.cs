@@ -12,7 +12,7 @@ public class NxtScene : MonoBehaviour
         next = SceneManager.GetActiveScene().buildIndex + 1; 
     }
 
-    private void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Player")
         {
