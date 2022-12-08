@@ -22,9 +22,9 @@ public class Flicker : MonoBehaviour
     }
     void FixedUpdate(){
         if (decrease){
-            if(light.intensity > 0){
+            if(light.intensity > 2.5){
                 //increase =true;
-                light.intensity -= 0.1f;
+                light.intensity -= 0.05f;
             }
             else{
                 decrease = false;
@@ -35,7 +35,7 @@ public class Flicker : MonoBehaviour
         if (increase){
             if(light.intensity < 5){
                 //increase =true;
-                light.intensity += 0.1f;
+                light.intensity += 0.05f;
             }
             else{
                 decrease = true;

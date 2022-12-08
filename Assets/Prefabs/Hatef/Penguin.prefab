@@ -601,10 +601,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7578738393081b4eb47547df88b272f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audio: {fileID: 0}
+  hurt: {fileID: 8300000, guid: 2437023a0867ffc4b924fd29cca1418e, type: 3}
+  die: {fileID: 0}
+  head: {fileID: 0}
+  body: {fileID: 0}
   PlayerGO: {fileID: 0}
   healthRemaining: 0
   healthMax: 60
   s: {fileID: 4422885105424601932}
+  isDeadFB: 0
+  enemyAiScript: {fileID: 0}
+  scaleChange: {x: 0, y: 0, z: 0}
+  stop: 0
+  go: {fileID: 0}
+  gameOverScript: {fileID: 0}
 --- !u!114 &4422885104108821814
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -617,14 +628,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edb1518219d8622498622b970fa78a7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damage: 5
   audio: {fileID: 0}
   clip: {fileID: 8300000, guid: 2437023a0867ffc4b924fd29cca1418e, type: 3}
   t1: {fileID: 0}
-  attackSpeed: 5
+  attackSpeed: 7
   rotSpeed: 3
-  activationdistance: 20
+  activationdistance: 25
+  patrolDistance: 10
   distance: 0
-  patrolDistance: 0
   attack: 0
   inRange: 0
   patrol: 0
@@ -635,6 +647,10 @@ MonoBehaviour:
   posY: 0
   posZ: 0
   isBoss: 0
+  playSound: 0
+  isDead: 0
+  hasAnimation: 0
+  stopTimer: 0
 --- !u!195 &4422885104108821811
 NavMeshAgent:
   m_ObjectHideFlags: 0

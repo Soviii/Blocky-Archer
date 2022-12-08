@@ -2,9 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using System;
 
 public class EnemyAI2 : MonoBehaviour
 {
+    //public Vector3 scaleChange;
+    public float damage;
+    private DateTime start;
+    private DateTime finish;
+    int ret;
     public AudioSource audio;
     public AudioClip clip;
     Animator anim;
@@ -17,8 +23,9 @@ public class EnemyAI2 : MonoBehaviour
     public float attackSpeed;
     public float rotSpeed = 3f;
     public float activationdistance;
+    public float patrolDistance;
     [SerializeField] float distance;
-    [SerializeField] float patrolDistance;
+    //[SerializeField] float patrolDistance;
     public bool attack;
     public bool inRange;
     public bool patrol;
@@ -29,13 +36,18 @@ public class EnemyAI2 : MonoBehaviour
     public float posX;
     public float posY;
     public float posZ;
-    Vector3[] positions;
+    //Vector3[] positions;
     public bool isBoss;
-    private bool playSound;
+    public bool playSound;
     private bool firstTime;
+    public bool isDead;
+    public bool hasAnimation;
+    public bool stopTimer;
     // Start is called before the first frame update
     void Awake(){
+        //scaleChange = new Vector3(-0.01f, -0.01f, -0.01f);
         playSound = true;
+        isDead = false;
         //firstTime = true;
         audio = GetComponent<AudioSource>();
         forward = true;
@@ -49,7 +61,8 @@ public class EnemyAI2 : MonoBehaviour
         pos1.y = t1.transform.position.y;
         //pos = new Vector3(t1.transform.position.x + 10f,
          //t1.transform.position.y, t1.transform.position.z);
-        posX = t1.transform.position.x + 20f;
+        //posX = t1.transform.position.x + 20f;
+        posX = t1.transform.position.x + patrolDistance;
         //t2 = t1;
         //t2.position = pos;
         Debug.Log(t1.transform.position.x);
@@ -64,42 +77,80 @@ public class EnemyAI2 : MonoBehaviour
     
     void Start()
     {
+        stopTimer = false;
+        ret = -1;
         anim = GetComponent<Animator>();
-        //playSound = false;
-        /*if(gameObject.name == "Final Boss"){
-            isBoss = true;
-            forward = false;
+        if (anim  != null){
+            //hasAnimation = true;
+            anim.SetInteger("Walk", 1);
         }
-        else{
-            isBoss = false;
+        /*else{
+            hasAnimation = false;
         }*/
-        //anim.SetInteger("Walk", 1);
-        //playerTransform = PlayerGO.transform;
+
         distance = Vector3.Distance(PlayerGO.transform.position, transform.transform.position);
         //Debug.Log(distance);
         
         //attack = true;
         //patrol = false;
     }
-
+    private void Timer(){
+            start = DateTime.Now;
+            finish = start.AddSeconds(2);
+    }  
+    void OnCollisionEnter(Collision coll){
+        if(coll.gameObject.tag !="Ground"){
+            forward = !forward;
+        }
+        
+     }
     // Update is called once per frame
     void Update()
     {
-
+        if(anim != null && isDead){
+            anim.SetInteger("Walk", 0);
+        }
 
         distance = Vector3.Distance(PlayerGO.transform.position, transform.transform.position);
+
+        if(isDead && gameObject.tag != "snowman"){
+            if(!stopTimer){
+                Timer();
+                stopTimer = true;
+            }
+
+            ret=DateTime.Compare(DateTime.Now, finish);
+            if (0 <= ret && !audio.isPlaying ){
+
+                Destroy(gameObject);
+            }
+            audio.volume = 0;
+            transform.localRotation = Quaternion.Euler(0, 0, 90);
+            /*if(transform.localRotation.z < 90f){
+                Debug.Log("Dying");
+                float z = transform.localRotation.z;
+                z += rotSpeed * Time.deltaTime;
+                //transform.localRotation = Quaternion.Euler(0, 0, z);
+            }*/
+            
+        }
+        else{
+            audio.volume = 1-distance/activationdistance;
+        }
+        //audio.volume = 1-distance/activationdistance;
         /*if(isBoss){
+
             Debug.Log("distance:");
             Debug.Log(distance);        
         }*/
-        if (distance < activationdistance){
+        if (distance < activationdistance && !isDead){
             //firstTime = false;
-            if (playSound){
+            if (!audio.isPlaying && playSound){
                 audio.PlayOneShot(clip);
-                playSound = false;
+                //playSound = false;
             }
             inRange = true;
-            playSound = false;
+            //playSound = false;
             //audio.PlayOneShot(clip);
         }
 
@@ -108,7 +159,8 @@ public class EnemyAI2 : MonoBehaviour
         /*else{
             inRange = false;
         }*/
-        if (inRange){
+        if (inRange && !isDead){
+            //Debug.Log("DFDFFDFDFDFDf");
             navMeshAgent.speed = attackSpeed;
             navMeshAgent.SetDestination(playerTransform.position);
             /*transform.rotation = Quaternion.Slerp(transform.rotation
@@ -116,7 +168,7 @@ public class EnemyAI2 : MonoBehaviour
 
             transform.position += transform.forward*attackSpeed*Time.deltaTime;*/
         }
-        else{
+        else if(!isDead && gameObject.tag != "snowman"){
             if (forward){
                 //Debug.Log("forward");
                 if (Vector3.Distance(transform.position, pos) > 2f){
@@ -143,23 +195,6 @@ public class EnemyAI2 : MonoBehaviour
 
     }
 
-    void OnCollisionEnter(Collision coll)
-    {
-        if (coll.gameObject.tag == "Player"){
-            Debug.Log("player");
-        }
-        if (coll.gameObject.tag == "arrow"){
-            Debug.Log("arrows");
-        }
-
-    }
-
-    /*void OnCollisionExit(Collision coll)
-    {
-         if (coll.gameObject.tag == "Player"){
-            attack = true;
-         }
-    }*/
 
 
 

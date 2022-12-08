@@ -9,14 +9,22 @@ using UnityEngine.SceneManagement;
 
 public class PlayerHealth : MonoBehaviour
 {
+    public AudioSource audio;
+    public AudioClip hurt;
     public float healthRemaining;
     public float healthMax;
     public Slider s;
+    public GameObject go;
+    public GameOver gameOverScript;
     // Start is called before the first frame update
     void Start()
     {
+        audio = GetComponent<AudioSource>();
+        gameOverScript = go.GetComponent<GameOver>();
+        
         healthRemaining = healthMax;
         s.value = HealthCalc();
+
     }
 
     // Update is called once per frame
@@ -24,6 +32,7 @@ public class PlayerHealth : MonoBehaviour
     {
          s.value = HealthCalc();
         if (healthRemaining <= 0){
+            //gameOverScript.ShowScreen();
             SceneManager.LoadScene("SnowBiome");
             //Destroy(gameObject);
             
@@ -35,36 +44,68 @@ public class PlayerHealth : MonoBehaviour
     }
     void OnCollisionEnter(Collision coll)
     {
-        Debug.Log(coll.gameObject.tag);
-        string name = coll.gameObject.tag;
+        if (coll.gameObject.tag != "icicle" && coll.gameObject.tag !="SnowGlobe" && coll.gameObject.tag !="Untagged" ){
+            audio.PlayOneShot(hurt);
+            if(coll.gameObject.GetComponent<EnemyAI2>()!= null){
+                healthRemaining-=coll.gameObject.GetComponent<EnemyAI2>().damage;
+            }
+            //healthRemaining-=coll.gameObject.GetComponent<EnemyAI2>().damage;
+        }
+        else{
+            if (coll.gameObject.tag == "SnowGlobe"){
+                audio.PlayOneShot(hurt);
+                healthRemaining-= 20f;
+            }
+            if(coll.gameObject.tag == "icicle"){
+                audio.PlayOneShot(hurt);
+                healthRemaining -=60;
+            }
+        }
+        //Debug.Log(coll.gameObject.tag);
+        /*string name = coll.gameObject.tag;
         switch(name){
             case "cat":
                 healthRemaining-= 5f;
+                audio.PlayOneShot(hurt);
                 break;
             case "dog":
                 healthRemaining-= 10f;
+                audio.PlayOneShot(hurt);
                 break;
             case "polarBear":
                 healthRemaining-= 20f;
+                audio.PlayOneShot(hurt);
                 break;
             case "chicken":
                 healthRemaining-= 5f;
+                audio.PlayOneShot(hurt);
                 break;
             case "lion":
                 healthRemaining-= 20f;
                 break; 
             case "penguin":
                 healthRemaining-= 10f;
+                audio.PlayOneShot(hurt);
                 break;
             case "SnowGlobe":
                 healthRemaining-= 10f;
+                audio.PlayOneShot(hurt);
                 break;
             case "snowman":
                 healthRemaining-= 25f;
+                audio.PlayOneShot(hurt);
+                break;*/
+            /*case "IceSheet":
+                healthRemaining -= 50f;
+                audio.PlayOneShot(hurt);
+                break;*/
+            /*case "icicle":
+                healthRemaining = -=50f;
+                audio.PlayOneShot(hurt);
                 break;
             default:
                 break;
-        }  
+        }*/  
 
         /*if (coll.gameObject.tag == "Enemy"){
             healthRemaining-= 20f;
