@@ -58,7 +58,7 @@ public class PlayerControl : MonoBehaviour
     Vector2 animationVelocity;
     [SerializeField] float animationSmoothTime = 0.1f;
     [SerializeField] float animationPlayTransition = 0.15f;
-    bool justLanded = true;
+    bool readyToLand = false;
     bool aimDowned = false;
     bool currentlySprinting = false;
 
@@ -68,12 +68,25 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] Transform bow;
     StandardizedBow sb;
 
+    [SerializeField] GameObject runningBow;
+    [SerializeField] GameObject shootingBow;
+
+    // global variable for multi-functional use
+    private Vector2 input = new Vector2(0f, 0f);
+
+    // particle effects
+    [SerializeField] ParticleSystem sprintParticles;
+    [SerializeField] ParticleSystem landingParticles;
+    float sprintTimeForParticles = 0f;
+
     //For testing and debugging...
     public int count = 1;
     [SerializeField] Transform spine;
     [SerializeField] Transform aimTargetXZ;
 
     private void Awake(){
+        runningBow.SetActive(true);
+        shootingBow.SetActive(false);
         audioSource = GetComponent<AudioSource>();
         controller = GetComponent<CharacterController>();
         playerInput = GetComponent<PlayerInput>();
@@ -105,8 +118,10 @@ public class PlayerControl : MonoBehaviour
     }
 
     void Update(){
+
         UpdateAimTarget();
         PlayerMovement();
+        CheckForParticleEffects();
         // UpdateBowRotation();
         // if (aimDowned){ bow.transform.LookAt(bowTargetRotation); }
 
@@ -115,10 +130,18 @@ public class PlayerControl : MonoBehaviour
         //openGate();
     }
 
-    void CheckForSprint(Vector2 input){
-        if(aimDowned){ return; }
+    void CheckForSprint(){
+        if(aimDowned || readyToLand){ return; }
 
-        if (sprintButtonHeld && !currentlySprinting && input.x == 0 && input.y == 1){
+
+        if (input.y == 0 && currentlySprinting){
+            animator.CrossFade(strafeAnimation, animationPlayTransition);
+            currentlySprinting = false;
+            playerSpeed = 4.0f;
+            sprintTimeForParticles = 0f;
+            sprintParticles.Clear();
+            sprintParticles.Stop();
+        } else if (sprintButtonHeld && !currentlySprinting && input.y > 0){
             // Debug.Log("entered sprint");
             animator.CrossFade(sprintAnimation, animationPlayTransition);
             playerSpeed = 8.0f;
@@ -126,13 +149,108 @@ public class PlayerControl : MonoBehaviour
         } else if (currentlySprinting && !sprintButtonHeld) {
             animator.CrossFade(strafeAnimation, animationPlayTransition);
             playerSpeed = 4.0f;
+            sprintTimeForParticles = 0f;
             currentlySprinting = false;
+        }
+    }
+
+    void CheckForParticleEffects(){
+        if(currentlySprinting){
+            sprintTimeForParticles += Time.deltaTime;
+            if (sprintTimeForParticles > 0.3f && !sprintParticles.isPlaying){
+                sprintParticles.Play();
+            }
+        } else if (!currentlySprinting && sprintParticles.isPlaying){
+            sprintParticles.Stop();
         }
     }
 
     //function for having dynamic upper body movement
     void UpdateAimTarget(){
         aimTarget.position = new Vector3(aimTargetXZ.transform.position.x, cameraTransform.position.y, aimTargetXZ.transform.position.z) + cameraTransform.forward * aimDistance;
+    }
+
+    void UpdateSprintBool(){
+        sprintButtonHeld = !sprintButtonHeld;
+    }
+
+    void PlayerMovement(){
+        groundedPlayer = controller.isGrounded;
+        if (groundedPlayer && playerVelocity.y < 0 && !aimDowned)
+        {
+            if (readyToLand){
+                if (currentlySprinting && input.y > 0){
+                    animator.CrossFade(sprintAnimation, animationPlayTransition);
+                    currentlySprinting = false;
+                } else {
+                    animator.CrossFade(strafeAnimation, animationPlayTransition);
+                }
+                landingParticles.Play();
+            }
+            readyToLand = false;
+            playerVelocity.y = 0f;
+        }
+
+        input = moveAction.ReadValue<Vector2>();
+        currentAnimationBlendVector = Vector2.SmoothDamp(currentAnimationBlendVector, input, ref animationVelocity, animationSmoothTime);
+        CheckForSprint(); // makes current animation sprinting animation if conditions are met
+        Vector3 move = new Vector3(currentAnimationBlendVector.x, 0, currentAnimationBlendVector.y);
+
+        /*when we move to the left/right, takes into account camera's right
+        when we move forward/backward, takes into account camera's forward/backward
+        needed for fluid movement when moving camera */
+        // normalized attribute returns direction; don't really need exact value
+        move = move.x * cameraTransform.right.normalized + move.z * cameraTransform.forward.normalized; 
+        move.y = 0f; //prevents character from bouncing up and down when moving backwards
+        controller.Move(move * Time.deltaTime * playerSpeed);
+
+        //for animation blending
+        animator.SetFloat(moveAnimationX, input.x);
+        animator.SetFloat(moveAnimationZ, input.y);
+
+        // Changes the height position of the player..
+        if (jumpAction.triggered && groundedPlayer){
+            // Debug.Log("Jumped!");
+            playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
+            if (!aimDowned){ animator.CrossFade(jumpUpAnimation, animationPlayTransition); }
+            readyToLand = true;
+        }
+
+        playerVelocity.y += gravityValue * Time.deltaTime;
+        controller.Move(playerVelocity * Time.deltaTime);
+
+        /* rotate towards camera direction */
+        float targetAngle = cameraTransform.eulerAngles.y; // quaternion->vector3->y-value
+        Quaternion targetRotation = Quaternion.Euler(0, targetAngle, 0);
+        if (aimDowned){ 
+            targetRotation = Quaternion.Euler(0, targetAngle + 80 , 0);
+        }
+        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotationSpeed  * Time.deltaTime);
+        
+        // spine.eulerAngles = new Vector3(spine.eulerAngles.x - 100f, spine.eulerAngles.y, spine.eulerAngles.z);
+    }
+
+    void SlowDownCharacter(){
+        runningBow.SetActive(false);
+        shootingBow.SetActive(true);
+        playerSpeed = 2.5f;
+        sprintTimeForParticles = 0f;
+        currentlySprinting = false;
+        animator.CrossFade(aimingAnimation, animationPlayTransition);
+        aimDowned = true;
+        // UpdateBowRotation();
+        sb.enabled = true;
+    }
+
+    void NormalizeCharacterSpeed(){
+        runningBow.SetActive(true);
+        shootingBow.SetActive(false);
+        playerSpeed = 4.0f;
+        sprintTimeForParticles = 0f;
+        animator.CrossFade(strafeAnimation, animationPlayTransition);
+        aimDowned = false;
+        // UpdateBowRotation();
+        sb.enabled = false;
     }
 
     //! deprecated function (need to fix possibly)
@@ -195,73 +313,7 @@ public class PlayerControl : MonoBehaviour
             }
     }
 
-    void UpdateSprintBool(){
-        sprintButtonHeld = !sprintButtonHeld;
-    }
 
-    void PlayerMovement(){
-        groundedPlayer = controller.isGrounded;
-        if (groundedPlayer && playerVelocity.y < 0 && !aimDowned)
-        {
-            playerVelocity.y = 0f;
-            if (justLanded){
-                animator.CrossFade(strafeAnimation, animationPlayTransition);
-                justLanded = false;
-            }
-        }
 
-        Vector2 input = moveAction.ReadValue<Vector2>();
-        currentAnimationBlendVector = Vector2.SmoothDamp(currentAnimationBlendVector, input, ref animationVelocity, animationSmoothTime);
-        CheckForSprint(input); // makes current animation sprinting animation if conditions are met
-        Vector3 move = new Vector3(currentAnimationBlendVector.x, 0, currentAnimationBlendVector.y);
-
-        /*when we move to the left/right, takes into account camera's right
-        when we move forward/backward, takes into account camera's forward/backward
-        needed for fluid movement when moving camera */
-        // normalized attribute returns direction; don't really need exact value
-        move = move.x * cameraTransform.right.normalized + move.z * cameraTransform.forward.normalized; 
-        move.y = 0f; //prevents character from bouncing up and down when moving backwards
-        controller.Move(move * Time.deltaTime * playerSpeed);
-
-        //for animation blending
-        animator.SetFloat(moveAnimationX, input.x);
-        animator.SetFloat(moveAnimationZ, input.y);
-
-        // Changes the height position of the player..
-        if (jumpAction.triggered && groundedPlayer){
-            // Debug.Log("Jumped!");
-            playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
-            if (!aimDowned){ animator.CrossFade(jumpUpAnimation, animationPlayTransition); }
-            justLanded = true;
-        }
-
-        playerVelocity.y += gravityValue * Time.deltaTime;
-        controller.Move(playerVelocity * Time.deltaTime);
-
-        /* rotate towards camera direction */
-        float targetAngle = cameraTransform.eulerAngles.y; // quaternion->vector3->y-value
-        Quaternion targetRotation = Quaternion.Euler(0, targetAngle, 0);
-        if (aimDowned){ 
-            targetRotation = Quaternion.Euler(0, targetAngle + 80 , 0);
-        }
-        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotationSpeed  * Time.deltaTime);
-        
-        // spine.eulerAngles = new Vector3(spine.eulerAngles.x - 100f, spine.eulerAngles.y, spine.eulerAngles.z);
-    }
-
-    void SlowDownCharacter(){
-        playerSpeed = 2.5f;
-        animator.CrossFade(aimingAnimation, animationPlayTransition);
-        aimDowned = true;
-        // UpdateBowRotation();
-        sb.enabled = true;
-    }
-
-    void NormalizeCharacterSpeed(){
-        playerSpeed = 4.0f;
-        animator.CrossFade(strafeAnimation, animationPlayTransition);
-        aimDowned = false;
-        // UpdateBowRotation();
-        sb.enabled = false;
-    }
+    
 }

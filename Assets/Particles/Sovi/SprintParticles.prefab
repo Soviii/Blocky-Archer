@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 198630419436621972}
   - component: {fileID: 199881894511863904}
   m_Layer: 0
-  m_Name: Smoke02_Mobile
+  m_Name: SprintParticles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

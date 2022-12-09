@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 198738731738625552}
   - component: {fileID: 199224885206084562}
   m_Layer: 0
-  m_Name: Puff
+  m_Name: LandParticles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
