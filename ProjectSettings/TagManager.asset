@@ -9,6 +9,11 @@ TagManager:
   - Target
   - Gate
   - NxtLevel
+  - Key
+  - Light
+  - LHColl
+  - Boat
+  - Enemy
   layers:
   - Default
   - TransparentFX

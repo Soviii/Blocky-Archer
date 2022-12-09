@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,18 +6,31 @@ using UnityEngine;
 public class LightRotation : MonoBehaviour
 {
     [SerializeField] float rotation = 20.0f;
-  
-    void Update()
-    {
-        transform.Rotate(0f, rotation * Time.deltaTime, 0f, Space.Self);
+    public Key k;
+    public UnlockLH ul;
+    public Boat b;
 
-        //rotate();
+    private void Start()
+    {
+        k = GameObject.FindGameObjectWithTag("Key").GetComponent<Key>();
+        ul = GameObject.FindGameObjectWithTag("LHColl").GetComponent<UnlockLH>();
+        b = GameObject.FindGameObjectWithTag("Boat").GetComponent<Boat>();
     }
 
-    //void rotate(bool activate)
-    //{
 
-    //    transform.Rotate(0f, rotation * Time.deltaTime, 0f, Space.Self);
+    void Update()
+    {
+        if (k.hasKey == true && ul.unlock == true)
+        {
+            rotate(); 
+            b.boatMove();
+        }
+    }
 
-    //}
+    public void rotate()
+    {
+       
+            transform.Rotate(0f, rotation * Time.deltaTime, 0f, Space.Self);
+            Debug.Log("Let There Be Light!");
+    }
 }
