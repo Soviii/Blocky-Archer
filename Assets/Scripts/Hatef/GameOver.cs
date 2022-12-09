@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 public class GameOver : MonoBehaviour
 {
     public void ShowScreen(){
+        GameObject.Find("PlayerHealthbar").SetActive(false);
         gameObject.SetActive(true);
     }
     // Start is called before the first frame update

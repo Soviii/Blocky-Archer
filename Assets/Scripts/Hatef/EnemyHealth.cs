@@ -89,7 +89,7 @@ public class EnemyHealth : MonoBehaviour
                 float scaleZ=transform.localScale.z;
 
                 if(scaleX > 0.01f || scaleY > 0.01f || scaleZ > 0.01f){
-                    transform.localScale += 3f*scaleChange;
+                    transform.localScale += 10f*scaleChange;
                 }
                 else{
                     gameOverScript.ShowScreen();

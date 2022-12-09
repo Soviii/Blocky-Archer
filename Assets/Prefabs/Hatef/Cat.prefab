@@ -1112,7 +1112,7 @@ MonoBehaviour:
   attackSpeed: 10
   rotSpeed: 3
   activationdistance: 20
-  patrolDistance: 3
+  patrolDistance: 20
   distance: 0
   attack: 0
   inRange: 0

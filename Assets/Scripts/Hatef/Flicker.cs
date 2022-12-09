@@ -33,7 +33,7 @@ public class Flicker : MonoBehaviour
         }
 
         if (increase){
-            if(light.intensity < 5){
+            if(light.intensity < 10){
                 //increase =true;
                 light.intensity += 0.05f;
             }

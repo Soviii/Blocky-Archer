@@ -33,7 +33,9 @@ public class PlayerHealth : MonoBehaviour
          s.value = HealthCalc();
         if (healthRemaining <= 0){
             //gameOverScript.ShowScreen();
-            SceneManager.LoadScene("SnowBiome");
+            //SceneManager.LoadScene("SnowBiome");
+            string sceneName =  SceneManager.GetActiveScene().name;
+            SceneManager.LoadScene(sceneName);
             //Destroy(gameObject);
             
         }
