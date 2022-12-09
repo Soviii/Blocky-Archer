@@ -100,6 +100,7 @@ public class EnemyAI2 : MonoBehaviour
     }  
     void OnCollisionEnter(Collision coll){
         if(coll.gameObject.tag !="Ground"){
+            Debug.Log("GGGGOOIINGGG BAAAAAACK");
             forward = !forward;
         }
         

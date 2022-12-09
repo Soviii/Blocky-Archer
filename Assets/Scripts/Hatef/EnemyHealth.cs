@@ -45,10 +45,11 @@ public class EnemyHealth : MonoBehaviour
         finalBossGo1 =GameObject.Find("Projectile1");
         finalBossGo2 =GameObject.Find("Projectile2");
         finalBossGo3 =GameObject.Find("Projectile3");
+        
         finalBossScript1=finalBossGo1.GetComponent<FinalBoss>();
         finalBossScript2=finalBossGo2.GetComponent<FinalBoss>();
         finalBossScript3=finalBossGo3.GetComponent<FinalBoss>();
-        PlayerGO = GameObject.FindGameObjectWithTag("Player");
+        //PlayerGO = GameObject.FindGameObjectWithTag("Player");
         //snowMan = GameObject.FindGameObjectWithTag("snowman");
         //enemyAiScript = snowMan.GetComponent<EnemyAI2>();
         enemyAiScript = GetComponent<EnemyAI2>();

@@ -730,7 +730,7 @@ MonoBehaviour:
   die: {fileID: 0}
   head: {fileID: 0}
   body: {fileID: 0}
-  PlayerGO: {fileID: 0}
+  PlayerGO: {fileID: 8970870927289981738, guid: 209b67609537b78459bc67c0dae1e0fe, type: 3}
   healthRemaining: 0
   healthMax: 100
   s: {fileID: 3008887675609041456}
