@@ -30,6 +30,7 @@ public class EnemyHealth : MonoBehaviour
     public bool stop;
     public GameObject go;
     public GameOver gameOverScript;
+    //string sceneName;
     //public bool playSound;
 
     GameObject snowMan;
@@ -42,13 +43,28 @@ public class EnemyHealth : MonoBehaviour
         stop = false;
         scaleChange = new Vector3(-0.001f, -0.001f, -0.001f);
         audio = GetComponent<AudioSource>();
-        finalBossGo1 =GameObject.Find("Projectile1");
+
+        if(gameObject.tag == "snowman"){
+            finalBossGo1 =GameObject.Find("Projectile1");
+            finalBossGo2 =GameObject.Find("Projectile2");
+            finalBossGo3 =GameObject.Find("Projectile3");
+        
+            finalBossScript1=finalBossGo1.GetComponent<FinalBoss>();
+            finalBossScript2=finalBossGo2.GetComponent<FinalBoss>();
+            finalBossScript3=finalBossGo3.GetComponent<FinalBoss>();
+        }
+
+        /*finalBossGo1 =GameObject.Find("Projectile1");
         finalBossGo2 =GameObject.Find("Projectile2");
         finalBossGo3 =GameObject.Find("Projectile3");
         
         finalBossScript1=finalBossGo1.GetComponent<FinalBoss>();
         finalBossScript2=finalBossGo2.GetComponent<FinalBoss>();
-        finalBossScript3=finalBossGo3.GetComponent<FinalBoss>();
+        finalBossScript3=finalBossGo3.GetComponent<FinalBoss>();*/
+        //sceneName =  SceneManager.GetActiveScene().name;
+        if(PlayerGO == null){
+            PlayerGO = GameObject.FindGameObjectWithTag("Player");
+        }
         //PlayerGO = GameObject.FindGameObjectWithTag("Player");
         //snowMan = GameObject.FindGameObjectWithTag("snowman");
         //enemyAiScript = snowMan.GetComponent<EnemyAI2>();
@@ -57,24 +73,44 @@ public class EnemyHealth : MonoBehaviour
             Debug.Log("NULL");
         }*/
         healthRemaining = healthMax;
-        s.value = HealthCalc();
+        if(s != null){
+             s.value = HealthCalc();
+        }
+        //s.value = HealthCalc();
     }
 
     // Update is called once per frame
     void Update()
     {
-        s.transform.LookAt(PlayerGO.transform);
-        s.value = HealthCalc();
+        if (s != null){
+            s.transform.LookAt(PlayerGO.transform);
+            s.value = HealthCalc();
+        }
+        //s.transform.LookAt(PlayerGO.transform);
+        //s.value = HealthCalc();
         if (healthRemaining <= 0){
-            enemyAiScript.isDead = true;
-            gameObject.GetComponent<BoxCollider>().isTrigger = true;
-            s.gameObject.SetActive(false);
+            if (enemyAiScript != null){
+                enemyAiScript.isDead = true;
+            }
+            //enemyAiScript.isDead = true;
+            BoxCollider bc = gameObject.GetComponent<BoxCollider>();
+            if(bc != null){
+                bc.isTrigger = true;
+            }
+            //gameObject.GetComponent<BoxCollider>().isTrigger = true;
+            if(s != null){
+                s.gameObject.SetActive(false);
+            }
+            //s.gameObject.SetActive(false);
             if (gameObject.tag == "snowman"){
                 //Debug.Log("BOSS DEAD");
                 if(!audio.isPlaying){
                     audio.PlayOneShot(die);
                 }
-                gameOverScript = go.GetComponent<GameOver>();
+                if(go != null){
+                    gameOverScript = go.GetComponent<GameOver>();
+                }
+                
                 gameObject.GetComponent<BoxCollider>().isTrigger = true;
                 finalBossScript1.isDead = true;
                 finalBossScript2.isDead = true;
@@ -92,7 +128,9 @@ public class EnemyHealth : MonoBehaviour
                     transform.localScale += 10f*scaleChange;
                 }
                 else{
-                    gameOverScript.ShowScreen();
+                    if(gameOverScript != null){
+                        gameOverScript.ShowScreen();
+                    }
                     Destroy(gameObject);
                 }
                 //float scaleXB=body.transform.localScale.x;

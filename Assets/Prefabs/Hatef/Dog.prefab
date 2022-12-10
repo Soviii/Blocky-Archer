@@ -1076,6 +1076,7 @@ MonoBehaviour:
   audio: {fileID: 0}
   clip: {fileID: 8300000, guid: 38b525ff58949254e8f0c953e8e71b0d, type: 3}
   t1: {fileID: 0}
+  PlayerGO: {fileID: 0}
   attackSpeed: 8
   rotSpeed: 3
   activationdistance: 40

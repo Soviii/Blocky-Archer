@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using System;
+using UnityEngine.SceneManagement;
 
 public class EnemyAI2 : MonoBehaviour
 {
@@ -19,7 +20,7 @@ public class EnemyAI2 : MonoBehaviour
     Transform t2;
     Transform t3;
     Transform t4;
-    GameObject PlayerGO;
+    public GameObject PlayerGO;
     public float attackSpeed;
     public float rotSpeed = 3f;
     public float activationdistance;
@@ -43,6 +44,7 @@ public class EnemyAI2 : MonoBehaviour
     public bool isDead;
     public bool hasAnimation;
     public bool stopTimer;
+    string sceneName;
     // Start is called before the first frame update
     void Awake(){
         //scaleChange = new Vector3(-0.01f, -0.01f, -0.01f);
@@ -53,7 +55,12 @@ public class EnemyAI2 : MonoBehaviour
         forward = true;
         inRange = false;
         navMeshAgent=GetComponent<NavMeshAgent>();
-        PlayerGO = GameObject.FindGameObjectWithTag("Player");
+        sceneName =  SceneManager.GetActiveScene().name;
+        if(sceneName == "SnowBiome"){
+            PlayerGO = GameObject.FindGameObjectWithTag("Player");
+        }
+        //PlayerGO = GameObject.FindGameObjectWithTag("Player");
+
         playerTransform = PlayerGO.transform;
         t1 = GetComponent<Transform>();
         pos1.x = t1.transform.position.x;
@@ -100,7 +107,7 @@ public class EnemyAI2 : MonoBehaviour
     }  
     void OnCollisionEnter(Collision coll){
         if(coll.gameObject.tag !="Ground"){
-            Debug.Log("GGGGOOIINGGG BAAAAAACK");
+            //Debug.Log("GGGGOOIINGGG BAAAAAACK");
             forward = !forward;
         }
         
@@ -146,7 +153,7 @@ public class EnemyAI2 : MonoBehaviour
         }*/
         if (distance < activationdistance && !isDead){
             //firstTime = false;
-            if (!audio.isPlaying && playSound){
+            if (audio != null && !audio.isPlaying && playSound){
                 audio.PlayOneShot(clip);
                 //playSound = false;
             }

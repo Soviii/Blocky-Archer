@@ -1109,6 +1109,7 @@ MonoBehaviour:
   audio: {fileID: 0}
   clip: {fileID: 8300000, guid: 5001dcc743b1b0e4dbbaed5f812a2d5c, type: 3}
   t1: {fileID: 0}
+  PlayerGO: {fileID: 8970870927289981738, guid: 209b67609537b78459bc67c0dae1e0fe, type: 3}
   attackSpeed: 10
   rotSpeed: 3
   activationdistance: 20
@@ -1167,7 +1168,7 @@ MonoBehaviour:
   die: {fileID: 0}
   head: {fileID: 0}
   body: {fileID: 0}
-  PlayerGO: {fileID: 8970870927289981738, guid: 209b67609537b78459bc67c0dae1e0fe, type: 3}
+  PlayerGO: {fileID: 0}
   healthRemaining: 0
   healthMax: 80
   s: {fileID: 8404526367539939086}

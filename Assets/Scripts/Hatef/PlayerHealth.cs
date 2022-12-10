@@ -14,16 +14,19 @@ public class PlayerHealth : MonoBehaviour
     public float healthRemaining;
     public float healthMax;
     public Slider s;
-    public GameObject go;
-    public GameOver gameOverScript;
+    //public GameObject go;
+    //public GameOver gameOverScript;
     // Start is called before the first frame update
     void Start()
     {
         audio = GetComponent<AudioSource>();
-        gameOverScript = go.GetComponent<GameOver>();
+        //gameOverScript = go.GetComponent<GameOver>();
         
         healthRemaining = healthMax;
-        s.value = HealthCalc();
+        if(s != null){
+            s.value =HealthCalc();
+        }
+        //s.value = HealthCalc();
 
     }
 
@@ -47,7 +50,10 @@ public class PlayerHealth : MonoBehaviour
     void OnCollisionEnter(Collision coll)
     {
         if (coll.gameObject.tag != "icicle" && coll.gameObject.tag !="SnowGlobe" && coll.gameObject.tag !="Untagged" ){
-            audio.PlayOneShot(hurt);
+            if(audio != null){
+                audio.PlayOneShot(hurt);
+            }
+            //audio.PlayOneShot(hurt);
             if(coll.gameObject.GetComponent<EnemyAI2>()!= null){
                 healthRemaining-=coll.gameObject.GetComponent<EnemyAI2>().damage;
             }

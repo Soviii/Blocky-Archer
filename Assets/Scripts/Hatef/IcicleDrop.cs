@@ -7,18 +7,21 @@ public class IcicleDrop : MonoBehaviour
     public AudioSource audio;
     public AudioClip clip;
     Rigidbody rb;
-    bool canDamage;
+    //bool canDamage;
     public Trigger trScript;
     public GameObject trGo;
     private BoxCollider bc;
+    bool isShot;
     // Start is called before the first frame update
     void Start()
     {
+
         rb = GetComponent<Rigidbody>();
         bc = GetComponent<BoxCollider>();
         audio = GetComponent<AudioSource>();
         //bc.enabled = false;
-        canDamage = true;
+        //canDamage = true;
+        isShot = false;
         trGo = GameObject.FindGameObjectWithTag("Trigger");
         trScript = trGo.GetComponent<Trigger>();
     }
@@ -27,7 +30,7 @@ public class IcicleDrop : MonoBehaviour
     void Update()
     {
         if(trScript.isTriggered){
-            if(!audio.isPlaying){
+            if(audio != null && isShot && !audio.isPlaying){
                 audio.PlayOneShot(clip);
             }
             rb.useGravity = true;
@@ -42,7 +45,8 @@ public class IcicleDrop : MonoBehaviour
         //Debug.Log(coll.gameObject.tag);
         //useGravity = false;
         if (coll.gameObject.tag == "arrow"){
-            Debug.Log("arrows_icicle");
+            //Debug.Log("arrows_icicle");
+            isShot = true;
             rb.useGravity = true;
         }
 
