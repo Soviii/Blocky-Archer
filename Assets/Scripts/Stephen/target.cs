@@ -8,6 +8,8 @@ public class target : MonoBehaviour
     MeshRenderer meshRenderer;
     [SerializeField] public int hitCount = 0;
     public bool targetHit = false;
+    [SerializeField] public AudioClip impact;
+
 
     void Start()
     {
@@ -22,6 +24,7 @@ public class target : MonoBehaviour
             Debug.Log("Target Hit!");
             targetHit = true;
             meshRenderer.material.color = Color.green;
+            AudioSource.PlayClipAtPoint(impact, transform.position);
             Destroy(other.gameObject);
             
         }

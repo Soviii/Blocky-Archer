@@ -7,10 +7,14 @@ public class UnlockLH : MonoBehaviour
 
     public bool unlock = false;
     public Key k;
+    public Boat b;
+    [SerializeField] public AudioClip ul;
+
 
     void Start()
     {
         k = GameObject.FindGameObjectWithTag("Key").GetComponent<Key>();
+        b = GameObject.FindGameObjectWithTag("Boat").GetComponent<Boat>();
     }
 
  
@@ -19,6 +23,8 @@ public class UnlockLH : MonoBehaviour
         if (other.tag == "Player" && k.hasKey == true)
         {
             unlock = true;
+            AudioSource.PlayClipAtPoint(ul, transform.position);
+            b.boatMove();
 
         }
     }

@@ -9,6 +9,8 @@ public class Key : MonoBehaviour
     public LightRotation activate;
     [SerializeField] float rotation = 10f;
     //GameObject key = new GameObject();
+    [SerializeField] public AudioClip pickUp;
+
 
     private void Start()
     {
@@ -28,6 +30,7 @@ public class Key : MonoBehaviour
         {
             Debug.Log("Key Obtained!");
             hasKey = true;
+            AudioSource.PlayClipAtPoint(pickUp, transform.position);
             Destroy(gameObject);
         }
     }
