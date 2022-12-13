@@ -7,6 +7,8 @@ using UnityEngine.SceneManagement;
 public class NxtScene : MonoBehaviour
 {
     int next;
+    [SerializeField] AudioSource audio;
+    [SerializeField] AudioClip portalSound;
     void Start()
     {
         next = SceneManager.GetActiveScene().buildIndex + 1; 
@@ -16,8 +18,13 @@ public class NxtScene : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            SceneManager.LoadScene(next);
+            audio.PlayOneShot(portalSound);
+            Invoke("LoadNextScene", 1f);            
         } 
+    }
+
+    void LoadNextScene(){
+        SceneManager.LoadScene(next);
     }
     
 }

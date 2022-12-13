@@ -20,8 +20,8 @@ public class StopTrigger : MonoBehaviour
     }
 
     void OnTriggerEnter(Collider coll){
-        Debug.Log(coll.gameObject.name);
-        Debug.Log("ICESHEET2");
+        // Debug.Log(coll.gameObject.name);
+        // Debug.Log("ICESHEET2");
         if(coll.gameObject.name == "IceSheet2"){
             
             isTr.isTriggered = false;

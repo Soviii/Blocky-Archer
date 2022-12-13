@@ -25,6 +25,7 @@ public class AiAttacking : MonoBehaviour
         GetComponentInChildren<Animator>().Play("Attack1");
     }
 
+
     void Update()
     {
         if (Vector3.Distance(transform.position, Player.position) > OutOfAttackRangeDistance)

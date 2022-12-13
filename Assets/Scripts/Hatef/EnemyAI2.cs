@@ -68,7 +68,7 @@ public class EnemyAI2 : MonoBehaviour
         //t2 = t1;
         //t2.position = pos;
         // Debug.Log(t1.transform.position.x);
-        Debug.Log(posX);
+        // Debug.Log(posX);
         pos.x = posX;
         pos.y = t1.transform.position.y;
         pos.z = t1.transform.position.z;

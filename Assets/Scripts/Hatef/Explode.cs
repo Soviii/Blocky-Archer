@@ -27,8 +27,8 @@ public class Explode : MonoBehaviour
         numChilds = transform.childCount;
         //toBeDestroyed = new GameObject[(numChilds/2)+1];
         done = false;
-        Debug.Log("Number Of Childs At first");
-        Debug.Log(numChilds);
+        // Debug.Log("Number Of Childs At first");
+        // Debug.Log(numChilds);
         count = 0;
         ret = -1;
         audio = GetComponent<AudioSource>();

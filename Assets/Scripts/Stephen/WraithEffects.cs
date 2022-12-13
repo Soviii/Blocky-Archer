@@ -33,8 +33,14 @@ public class WraithEffects : MonoBehaviour
             deathParticles.transform.position = transform.position;
             transform.position = new Vector3(0f, 0f, 0f);
             deathParticles.Play();
+            Invoke("DestroyWraithAssets", 1f);
         } else if (other.gameObject.tag == "arrow"){ 
             audioSource.PlayOneShot(hurtAudio);
         }
+    }
+
+    private void DestoryWraithAssets(){
+        Destroy(deathParticles);
+        Destroy(gameObject);
     }
 }

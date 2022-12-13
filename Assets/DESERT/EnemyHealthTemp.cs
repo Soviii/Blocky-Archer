@@ -7,7 +7,7 @@ public class EnemyHealthTemp : MonoBehaviour
     public float healthPoints;
     public float maxHealth;
     public float damageToPlayer;
-
+    public bool droppedKey = false;
     void Start()
     {
         healthPoints = maxHealth;
@@ -17,8 +17,9 @@ public class EnemyHealthTemp : MonoBehaviour
     {
         if (healthPoints <= 0)
         {
-            if (gameObject.GetComponent<spiderDropKey>() != null){
+            if (gameObject.GetComponent<spiderDropKey>() != null && droppedKey == false){
                 GetComponent<spiderDropKey>().DropKey();
+                droppedKey = true;
             }
             GetComponentInChildren<Slider>().gameObject.SetActive(false);
             GetComponentInChildren<Animator>().Play("Death");
@@ -37,6 +38,10 @@ public class EnemyHealthTemp : MonoBehaviour
         if (other.gameObject.tag == "arrow"){
             TakeDamage(15f);
         }
+        // if (other.gameObject.tag == "Player"){
+        //     Debug.Log("Player taking damage!");
+        //     other.gameObject.GetComponent<PlayerHealth>().healthRemaining -= 30f;
+        // }
     }
 
     public void TakeDamage(float damage)

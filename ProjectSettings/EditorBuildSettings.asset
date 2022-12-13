@@ -6,6 +6,15 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Stephen/TrainingGround.unity
+    guid: a516482e358a84feb843b8ff4a1c6d91
+  - enabled: 1
+    path: Assets/Scenes/Christian/Desert Level.unity
+    guid: da7cc15e4b93f294094fcee220df14ed
+  - enabled: 1
+    path: Assets/Scenes/Stephen/Forest_Map.unity
+    guid: 6dd6022329ba9374caa086eef594cf42
+  - enabled: 1
     path: Assets/Scenes/Hatef/SnowBiome.unity
-    guid: 096a633ac60bbb34e92ddd27af5dc7a1
+    guid: 65b324a532341f54489e3804e558effc
   m_configObjects: {}
