@@ -11,7 +11,7 @@ public class WraithEffects : MonoBehaviour
     [SerializeField] AudioClip deathClip;
     EnemyHealth eh;
     WraithScript ws;
-    
+    private bool deathParticlesMoved = false;
 
     void Start(){
         ws = GetComponent<WraithScript>();
@@ -30,7 +30,10 @@ public class WraithEffects : MonoBehaviour
     private void OnCollisionEnter(Collision other) {
         if (eh.healthRemaining <= 0){
             audioSource.PlayOneShot(deathClip);
-            deathParticles.transform.position = transform.position;
+            if (!deathParticlesMoved){
+                deathParticles.transform.position = transform.position;
+                deathParticlesMoved = true;
+            }
             transform.position = new Vector3(0f, 0f, 0f);
             deathParticles.Play();
             Invoke("DestroyWraithAssets", 1f);

@@ -18,8 +18,10 @@ public class NxtScene : MonoBehaviour
     {
         if (other.tag == "Player")
         {
+            other.gameObject.GetComponent<PlayerControl>().enabled = false;
             audio.PlayOneShot(portalSound);
-            Invoke("LoadNextScene", 1f);            
+            Invoke("LoadNextScene", 1f);     
+
         } 
     }
 

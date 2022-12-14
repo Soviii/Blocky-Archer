@@ -32,6 +32,12 @@ TagManager:
   - Boat
   - TrainTarg
   - Spider
+  - Target
+  - LHVCam
+  - StalVCam
+  - BossEntranceVCam
+  - JeepVCam
+  - StoneWallVCam
   layers:
   - Default
   - TransparentFX

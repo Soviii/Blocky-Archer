@@ -38,10 +38,10 @@ public class EnemyHealthTemp : MonoBehaviour
         if (other.gameObject.tag == "arrow"){
             TakeDamage(15f);
         }
-        // if (other.gameObject.tag == "Player"){
-        //     Debug.Log("Player taking damage!");
-        //     other.gameObject.GetComponent<PlayerHealth>().healthRemaining -= 30f;
-        // }
+        if (other.gameObject.tag == "Player"){
+            Debug.Log("Player taking damage!");
+            other.gameObject.GetComponent<PlayerHealth>().healthRemaining -= 30f;
+        }
     }
 
     public void TakeDamage(float damage)

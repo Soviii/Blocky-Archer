@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Cinemachine;
 public class Key : MonoBehaviour
 {
 
@@ -31,9 +31,14 @@ public class Key : MonoBehaviour
             Debug.Log("Key Obtained!");
             hasKey = true;
             AudioSource.PlayClipAtPoint(pickUp, transform.position);
-            Destroy(gameObject);
+            GameObject.FindGameObjectWithTag("JeepVCam").GetComponent<CinemachineVirtualCamera>().Priority = 30;
+            Invoke("LookBackAtPlayer", 1.5f);
         }
     }
 
+    void LookBackAtPlayer(){
+        GameObject.FindGameObjectWithTag("JeepVCam").GetComponent<CinemachineVirtualCamera>().Priority = 1;
+        Destroy(gameObject);
+    }
 }
 
